@@ -1,0 +1,22 @@
+{
+  "name": "color-this",
+  "version": "1.0.0",
+  "description": "Web Application for image colorization using Generative Adversarial Networks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asimsedhain/Color-This.git"
+  },
+  "author": "Ashim Sedhain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/asimsedhain/Color-This/issues"
+  },
+  "homepage": "https://github.com/asimsedhain/Color-This#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
