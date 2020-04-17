@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Color This</title>
+
+	<!---Bootstrap CDN-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+	<!--Linking Style CSS File-->
+	<!-- <link rel="stylesheet" href="style.css"> -->
+
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+
+
+</head>
+
+<body>
+	<div class="container">
+		<div class="row ">
+			<div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+				<div class="card card-signin my-5 bg-white mb-3">
+					<h5 class="card-header text-center">Image Submission</h5>
+					<div class="card-body">
+						<form class="form-signin" id="formLogin" action="/upload" method="POST" enctype="multipart/form-data">
+							<div class="form-group">
+								<input type="file" id="Image" class="form-control" name="Original" placeholder="Submit Image" required>
+							</div>
+							<button class="btn btn-primary btn-block text-uppercase" value="Submit" id="login"
+								type="submit">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<!-- <script src="script.js"></script> -->
+</body>
+
+</html>
