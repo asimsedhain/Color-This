@@ -3,10 +3,13 @@ const path = require("path");
 const fs = require("fs")
 const assert = require('assert');
 const multer = require("multer");
+const cookie = require("cookie-parser");
+const objectId = require("mongodb").ObjectID;
 require("dotenv").config()
 
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
+app.use(cookie());
 
 let db;
 
@@ -39,6 +42,7 @@ app.use(express.static("public"));
 
 //handling the first endpoint
 app.get("/", (req, res) => {
+	console.log("recieved request")
 	res.statusCode = 200;
 	res.setHeader("Content-Type", "text/html");
 	res.sendFile(path.join(public, "index.html"));
@@ -46,20 +50,55 @@ app.get("/", (req, res) => {
 
 
 
-
-app.post('/upload', upload, (req, res) => {
-	if(!req.file){
-		
+// endpoint for uploading pictures
+app.post('/upload', upload, async (req, res) => {
+	if (!req.file) {
 		// console.log(res);
 		res.send("No file");
-	}else{
+	} else {
 		req.file.fieldname = `${req.file.fieldname}-${Date.now()}${path.extname(req.file.originalname)}`
-		db.collection(process.env.collection).insertOne(req.file);
-		console.log("File inserted");
-		res.send(`Uploaded ${req.file.fieldname}`);
+		image = await db.collection(process.env.collection).insertOne(req.file);
+		res.cookie("_id", image.insertedId)
+		console.log(`File inserted with id: ${image.insertedId}`);
+		res.redirect("/")
 
 	}
-  });
+});
+// get request for getting the images associated with this account
+app.get("/upload/:type", async (req, res) => {
+	let doc
+	try {
+		let cursor = await db.collection(process.env.collection).find({ "_id": objectId(req.cookies._id) }).limit(1);
+		doc = await cursor.next();
+	} catch (e) {
+		console.log("error with database")
+		console.log(e)
+		res.status(404).send("No images found")
+	}
+	if (!doc) {
+		console.log(req.cookies._id)
+		res.status(404).send("No images found. Doc null")
+
+	} else {
+		res.status(200)
+		res.contentType("jpeg")
+		if(!req.param.type){
+			res.send("need type")
+		}
+		if(req.param.type.toLowerCase()==="original"){
+			res.end(doc.buffer.buffer, "binary")
+		}
+		// else if(doc.colored.buffer){
+			
+		// }
+	}
+})
+
+
+// endpoint for getting the colored picture 
+app.get("/upload/colored", async (req, res)=>{
+
+})
 
 
 
@@ -70,17 +109,17 @@ app.listen(PORT, () => {
 
 
 // Check File Type
-function checkFileType(file, cb){
+function checkFileType(file, cb) {
 	// Allowed ext
 	const filetypes = /jpeg|jpg|png/;
 	// Check ext
 	const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 	// Check mime
 	const mimetype = filetypes.test(file.mimetype);
-  
-	if(mimetype && extname){
-	  return cb(null,true);
+
+	if (mimetype && extname) {
+		return cb(null, true);
 	} else {
-	  cb('Error: Images Only!');
+		cb('Error: Images Only!');
 	}
-  }
+}

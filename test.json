@@ -1,0 +1,256 @@
+{
+	result: { n: 1,
+	   opTime: { ts: [Timestamp
+			], t: 2
+		},
+	   electionId: 7fffffff0000000000000002,
+	   ok: 1,
+	   '$clusterTime': { clusterTime: [Timestamp
+			], signature: [Object
+			]
+		},
+	   operationTime:
+		Timestamp { _bsontype: 'Timestamp', low_: 1, high_: 1587199220
+		}
+	},
+	connection:
+	 Connection {
+	   _events: { error: [Function
+			],
+		  close: [Function
+			],
+		  timeout: [Function
+			],
+		  parseError: [Function
+			],
+		  message: [Function
+			]
+		},
+	   _eventsCount: 5,
+	   _maxListeners: undefined,
+	   id: 0,
+	   options: { host: 'images-shard-00-01-ulhix.mongodb.net',
+		  port: 27017,
+		  size: 5,
+		  minSize: 0,
+		  connectionTimeout: 10000,
+		  socketTimeout: 360000,
+		  keepAlive: true,
+		  keepAliveInitialDelay: 300000,
+		  noDelay: true,
+		  ssl: true,
+		  checkServerIdentity: true,
+		  ca: null,
+		  crl: null,
+		  cert: null,
+		  key: null,
+		  passphrase: null,
+		  rejectUnauthorized: true,
+		  promoteLongs: true,
+		  promoteValues: true,
+		  promoteBuffers: false,
+		  reconnect: false,
+		  reconnectInterval: 1000,
+		  reconnectTries: 30,
+		  domainsEnabled: false,
+		  legacyCompatMode: true,
+		  metadata: [Object
+			],
+		  disconnectHandler: [Store
+			],
+		  cursorFactory: [Function: Cursor
+			],
+		  emitError: true,
+		  monitorCommands: false,
+		  setName: 'Images-shard-0',
+		  promiseLibrary: [Function: Promise
+			],
+		  servers: [Array
+			],
+		  authSource: 'admin',
+		  replicaSet: 'Images-shard-0',
+		  retryWrites: true,
+		  w: 'majority',
+		  caseTranslate: true,
+		  sslValidate: true,
+		  auth: [Object
+			],
+		  dbName: 'test',
+		  srvHost: 'images-ulhix.mongodb.net',
+		  socketTimeoutMS: 360000,
+		  connectTimeoutMS: 10000,
+		  useRecoveryToken: true,
+		  readPreference: [ReadPreference
+			],
+		  credentials: [MongoCredentials
+			],
+		  monitoring: false,
+		  parent: [ReplSet
+			],
+		  bson: BSON {}
+		},
+	   logger: Logger { className: 'Connection'
+		},
+	   bson: BSON {},
+	   tag: undefined,
+	   maxBsonMessageSize: 67108864,
+	   port: 27017,
+	   host: 'images-shard-00-01-ulhix.mongodb.net',
+	   socketTimeout: 360000,
+	   keepAlive: true,
+	   keepAliveInitialDelay: 300000,
+	   connectionTimeout: 10000,
+	   responseOptions: { promoteLongs: true,
+		  promoteValues: true,
+		  promoteBuffers: false
+		},
+	   flushing: false,
+	   queue: [],
+	   writeStream: null,
+	   destroyed: false,
+	   timedOut: false,
+	   hashedName: '90cf891da1fdd90baec316c21e310604222be694',
+	   workItems: [],
+	   socket:
+		TLSSocket {
+		  _tlsOptions: [Object
+			],
+		  _secureEstablished: true,
+		  _securePending: false,
+		  _newSessionPending: false,
+		  _controlReleased: true,
+		  _SNICallback: null,
+		  servername: 'images-shard-00-01-ulhix.mongodb.net',
+		  alpnProtocol: false,
+		  authorized: true,
+		  authorizationError: null,
+		  encrypted: true,
+		  _events: [Object
+			],
+		  _eventsCount: 6,
+		  connecting: false,
+		  _hadError: false,
+		  _handle: [TLSWrap
+			],
+		  _parent: null,
+		  _host: 'images-shard-00-01-ulhix.mongodb.net',
+		  _readableState: [ReadableState
+			],
+		  readable: true,
+		  _maxListeners: undefined,
+		  _writableState: [WritableState
+			],
+		  writable: true,
+		  allowHalfOpen: false,
+		  _sockname: null,
+		  _pendingData: null,
+		  _pendingEncoding: '',
+		  server: undefined,
+		  _server: null,
+		  ssl: [TLSWrap
+			],
+		  _requestCert: true,
+		  _rejectUnauthorized: true,
+		  timeout: 360000,
+			[Symbol(res)
+			]: [TLSWrap
+			],
+			[Symbol(asyncId)
+			]: 31,
+			[Symbol(lastWriteQueueSize)
+			]: 0,
+			[Symbol(timeout)
+			]: [Timeout
+			],
+			[Symbol(kBytesRead)
+			]: 0,
+			[Symbol(kBytesWritten)
+			]: 0,
+			[Symbol(connect-options)
+			]: [Object
+			],
+			[Symbol(disable-renegotiation)
+			]: true
+		},
+	   buffer: null,
+	   sizeOfMessage: 0,
+	   bytesRead: 0,
+	   stubBuffer: null,
+	   ismaster: { hosts: [Array
+			],
+		  setName: 'Images-shard-0',
+		  setVersion: 2,
+		  ismaster: true,
+		  secondary: false,
+		  primary: 'images-shard-00-01-ulhix.mongodb.net: 27017',
+		  tags: [Object
+			],
+		  me: 'images-shard-00-01-ulhix.mongodb.net: 27017',
+		  electionId: 7fffffff0000000000000002,
+		  lastWrite: [Object
+			],
+		  maxBsonObjectSize: 16777216,
+		  maxMessageSizeBytes: 48000000,
+		  maxWriteBatchSize: 100000,
+		  localTime: 2020-04-18T08: 40: 16.402Z,
+		  logicalSessionTimeoutMinutes: 30,
+		  connectionId: 36691,
+		  minWireVersion: 0,
+		  maxWireVersion: 8,
+		  readOnly: false,
+		  ok: 1,
+		  '$clusterTime': [Object
+			],
+		  operationTime: [Timestamp
+			]
+		},
+	   lastIsMasterMS: 58
+	},
+	message:
+	 BinMsg {
+	   parsed: true,
+	   raw:
+		<Buffer e6 00 00 00 a3 5f 97 00 01 00 00 00 dd 07 00 00 00 00 00 00 00 d1 00 00 00 10 6e 00 01 00 00 00 03 6f 70 54 69 6d 65 00 1c 00 00 00 11 74 73 00 
+  01 00 ... >,
+	   data:
+		<Buffer 00 00 00 00 00 d1 00 00 00 10 6e 00 01 00 00 00 03 6f 70 54 69 6d 65 00 1c 00 00 00 11 74 73 00 01 00 00 00 f4 bc 9a 5e 12 74 00 02 00 00 00 00 
+  00 00 ... >,
+	   bson: BSON {},
+	   opts: { promoteLongs: true,
+		  promoteValues: true,
+		  promoteBuffers: false
+		},
+	   length: 230,
+	   requestId: 9920419,
+	   responseTo: 1,
+	   opCode: 2013,
+	   fromCompressed: undefined,
+	   responseFlags: 0,
+	   checksumPresent: false,
+	   moreToCome: false,
+	   exhaustAllowed: false,
+	   promoteLongs: true,
+	   promoteValues: true,
+	   promoteBuffers: false,
+	   documents: [
+			[Object
+			]
+		],
+	   index: 214,
+	   hashedName: '90cf891da1fdd90baec316c21e310604222be694'
+	},
+	ops: [
+		{ fieldname: 'Original-1587199219635.png',
+		 originalname: 'Preview02.png',
+		 encoding: '7bit',
+		 mimetype: 'image/png',
+		 buffer:
+		  <Buffer 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 07 80 00 00 03 9a 08 06 00 00 00 79 a0 4f 28 00 00 00 01 73 52 47 42 00 ae ce 1c e9 00 00 00 04 ... >,
+		 size: 22362,
+		 userId: 1,
+		 _id: 5e9abcf3ec73081a084b5e6f
+		}
+	],
+	insertedCount: 1,
+	insertedId: 5e9abcf3ec73081a084b5e6f
+}
