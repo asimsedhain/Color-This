@@ -5,6 +5,8 @@ const assert = require('assert');
 const multer = require("multer");
 const cookie = require("cookie-parser");
 const objectId = require("mongodb").ObjectID;
+const redis = require("redis");
+const redisPublisher = redis.createClient();
 require("dotenv").config()
 
 const app = express();
@@ -59,7 +61,9 @@ app.post('/upload', upload, async (req, res) => {
 		req.file.fieldname = `${req.file.fieldname}-${Date.now()}${path.extname(req.file.originalname)}`
 		image = await db.collection(process.env.collection).insertOne(req.file);
 		res.cookie("_id", image.insertedId)
-		console.log(`File inserted with id: ${image.insertedId}`);
+		// console.log(`File inserted with id: ${image.insertedId}`);
+		redisPublisher.publish("processing", `${image.insertedId}`);
+		console.log(`File inserted in DB and queue with id: ${image.insertedId}`);
 		res.redirect("/")
 
 	}
@@ -81,24 +85,29 @@ app.get("/upload/:type", async (req, res) => {
 
 	} else {
 		res.status(200)
-		res.contentType("jpeg")
-		if(!req.param.type){
+
+		if (!req.param.type) {
 			res.send("need type")
-		}
-		if(req.param.type.toLowerCase()==="original"){
-			res.end(doc.buffer.buffer, "binary")
-		}
-		// else if(doc.colored.buffer){
-			
-		// }
+		} else
+			if (req.param.type.toLowerCase() === "original") {
+				res.contentType("jpeg")
+				res.end(doc.buffer.buffer, "binary")
+			}
+			else if (req.param.type.toLowerCase() === "color") {
+				if (!doc.color) {
+					res.send("Processing")
+				} else {
+					res.contentType("jpeg")
+					res.end(doc.color.buffer, "binary")
+				}
+			}else{
+				res.send("No images")
+			}
 	}
 })
 
 
-// endpoint for getting the colored picture 
-app.get("/upload/colored", async (req, res)=>{
 
-})
 
 
 
