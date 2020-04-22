@@ -29,7 +29,7 @@ MongoClient.connect(process.env.DBURI, async function (err, client) {
 const storage = multer.memoryStorage()
 const upload = multer({
 	storage: storage,
-	limits: { fileSize: 1000000 },
+	limits: { fileSize: 16000000 },
 	fileFilter: function (req, file, cb) {
 		checkFileType(file, cb);
 	}
@@ -86,14 +86,14 @@ app.get("/upload/:type", async (req, res) => {
 	} else {
 		res.status(200)
 
-		if (!req.param.type) {
+		if (!req.params.type) {
 			res.send("need type")
 		} else
-			if (req.param.type.toLowerCase() === "original") {
+			if (req.params.type.toLowerCase() === "original") {
 				res.contentType("jpeg")
 				res.end(doc.buffer.buffer, "binary")
 			}
-			else if (req.param.type.toLowerCase() === "color") {
+			else if (req.params.type.toLowerCase() === "color") {
 				if (!doc.color) {
 					res.send("Processing")
 				} else {

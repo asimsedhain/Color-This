@@ -28,7 +28,7 @@
 				<div class="card card-signin my-5 bg-white mb-3">
 					<h5 class="card-header text-center">Image Submission</h5>
 					<div class="card-body">
-						<form class="form-signin" id="formLogin" action="/upload" method="POST" enctype="multipart/form-data">
+						<form class="form-signin" id="form" action="/upload" method="POST" enctype="multipart/form-data">
 							<div class="form-group">
 								<input type="file" id="Image" class="form-control" name="Original" placeholder="Submit Image" required>
 							</div>
@@ -39,9 +39,17 @@
 				</div>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col">
+				<img src="http://localhost:5000/upload/original" alt="">
+			</div>
+			<div class="col">
+				<img src="http://localhost:5000/upload/color" alt="">
+			</div>
+		</div>
 	</div>
 	</div>
-	<!-- <script src="script.js"></script> -->
+	<script src="script.js"></script>
 </body>
 
 </html>
