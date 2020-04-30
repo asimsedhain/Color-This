@@ -1,13 +1,10 @@
 const express = require("express");
 const path = require("path");
-const fs = require("fs")
-const assert = require('assert');
 const multer = require("multer");
 const cookie = require("cookie-parser");
 const objectId = require("mongodb").ObjectID;
 const redis = require("redis");
-const redisPublisher = redis.createClient();
-require("dotenv").config()
+const redisPublisher = redis.createClient({host: "redis", port: 6379});
 
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
@@ -113,7 +110,7 @@ app.get("/upload/:type", async (req, res) => {
 
 
 app.listen(PORT, () => {
-	console.log(`Listening on: http://localhost:${PORT}`);
+	console.log('Listening on: http://localhost:'+PORT);
 })
 
 

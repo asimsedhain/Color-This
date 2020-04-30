@@ -1,0 +1,5 @@
+numpy
+opencv-python
+pymongo[srv]==3.10.1
+redis==3.4.1
+tensorflow
