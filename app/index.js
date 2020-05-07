@@ -4,12 +4,13 @@ const multer = require("multer");
 const cookie = require("cookie-parser");
 const objectId = require("mongodb").ObjectID;
 const redis = require("redis");
-const redisPublisher = redis.createClient({host: "redis", port: 6379});
+const cors = require("cors");
+const redisPublisher = redis.createClient({ host: "redis", port: 6379 });
 
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
 app.use(cookie());
-
+app.use(cors());
 let db;
 
 const PORT = process.env.PORT;
@@ -41,7 +42,6 @@ app.use(express.static("public"));
 
 //handling the first endpoint
 app.get("/", (req, res) => {
-	console.log("recieved request")
 	res.statusCode = 200;
 	res.setHeader("Content-Type", "text/html");
 	res.sendFile(path.join(public, "index.html"));
@@ -52,53 +52,58 @@ app.get("/", (req, res) => {
 // endpoint for uploading pictures
 app.post('/upload', upload, async (req, res) => {
 	if (!req.file) {
-		// console.log(res);
-		res.send("No file");
+
+		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
 	} else {
 		req.file.fieldname = `${req.file.fieldname}-${Date.now()}${path.extname(req.file.originalname)}`
 		image = await db.collection(process.env.collection).insertOne(req.file);
-		res.cookie("_id", image.insertedId)
-		// console.log(`File inserted with id: ${image.insertedId}`);
 		redisPublisher.publish("processing", `${image.insertedId}`);
 		console.log(`File inserted in DB and queue with id: ${image.insertedId}`);
-		res.redirect("/")
+		res.contentType("application/json");
+		res.send(JSON.stringify({"imageId": image.insertedId}));
 
 	}
 });
 // get request for getting the images associated with this account
 app.get("/upload/:type", async (req, res) => {
 	let doc
+	if (!req.query.id) {
+		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
+		return
+	}
+	
 	try {
-		let cursor = await db.collection(process.env.collection).find({ "_id": objectId(req.cookies._id) }).limit(1);
+		let cursor = await db.collection(process.env.collection).find({ "_id": objectId(req.query.id) }).limit(1);
 		doc = await cursor.next();
 	} catch (e) {
 		console.log("error with database")
 		console.log(e)
-		res.status(404).send("No images found")
+		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
 	}
 	if (!doc) {
-		console.log(req.cookies._id)
-		res.status(404).send("No images found. Doc null")
-
+		console.log(req.query._id)
+		console.log("I am here")
+		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
 	} else {
-		res.status(200)
 
 		if (!req.params.type) {
-			res.send("need type")
+		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
 		} else
 			if (req.params.type.toLowerCase() === "original") {
+				res.status(200)
 				res.contentType("jpeg")
 				res.end(doc.buffer.buffer, "binary")
 			}
 			else if (req.params.type.toLowerCase() === "color") {
 				if (!doc.color) {
-					res.send("Processing")
+		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
 				} else {
+				res.status(200)
 					res.contentType("jpeg")
 					res.end(doc.color.buffer, "binary")
 				}
-			}else{
-				res.send("No images")
+			} else {
+		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
 			}
 	}
 })
@@ -110,7 +115,7 @@ app.get("/upload/:type", async (req, res) => {
 
 
 app.listen(PORT, () => {
-	console.log('Listening on: http://localhost:'+PORT);
+	console.log(`Listening on: http://localhost:${PORT}`);
 })
 
 
