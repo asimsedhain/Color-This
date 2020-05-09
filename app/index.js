@@ -55,9 +55,9 @@ app.post('/upload', upload, async (req, res) => {
 
 		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
 	} else {
-		req.file.fieldname = `${req.file.fieldname}-${Date.now()}${path.extname(req.file.originalname)}`
-		image = await db.collection(process.env.collection).insertOne(req.file);
-		redisPublisher.lpush(process.env.list_name, `${image.insertedId}`);
+		req.file.fieldname = `${Date.now()}${path.extname(req.file.originalname)}`
+		image = await db.collection(process.env.collection).insertOne({fieldname: req.file.fieldname, originalname: req.file.originalname, encoding: req.file.encoding, mimetype: req.file.mimetype, size: req.file.size});
+		redisPublisher.lpush(process.env.list_name, JSON.stringify({id: image.insertedId, original: req.file.buffer}));
 		console.log(`${new Date().toLocaleString()}: File inserted in DB and queue with id: ${image.insertedId}`);
 		res.contentType("application/json");
 		res.send(JSON.stringify({"imageId": image.insertedId}));
@@ -89,7 +89,7 @@ app.get("/upload/:type", async (req, res) => {
 			if (req.params.type.toLowerCase() === "original") {
 				res.status(200)
 				res.contentType("jpeg")
-				res.end(doc.buffer.buffer, "binary")
+				res.end(doc.original.buffer, "binary")
 			}
 			else if (req.params.type.toLowerCase() === "color") {
 				if (!doc.color) {

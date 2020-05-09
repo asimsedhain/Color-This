@@ -8,7 +8,7 @@ from bson.objectid import ObjectId
 import time
 import base64
 from datetime import datetime
-
+import json
 
 
 client = pymongo.MongoClient(os.getenv("DBURI"))
@@ -26,8 +26,8 @@ def getDocument(post_id):
 	# Convert from string to ObjectId:
 	document = client[os.getenv("dbname")][os.getenv("collection")].find_one({'_id': ObjectId(post_id)})
 	return document
-def updateDocument(post_id, buffer):
-	result = client[os.getenv("dbname")][os.getenv("collection")].update_one({'_id': ObjectId(post_id)}, {'$set': {'color':buffer}})
+def updateDocument(post_id,original_buffer, color_buffer):
+	result = client[os.getenv("dbname")][os.getenv("collection")].update_one({'_id': ObjectId(post_id)}, {'$set': {"original":original_buffer, 'color':color_buffer}})
 	return result
 
 # This preprocesses any image so it can be passed into the model
@@ -40,8 +40,9 @@ def preprocessor(img):
 	temp_img_256 = cv.resize(temp_img, (256, 256))
 	training_data = np.reshape(temp_img_128[:, :, 0], (1, 128, 128, 1))
 	output_data = np.reshape(temp_img_256[:, :, 0], (1, 256, 256, 1))
+	original_resized_image = cv.resize(img, (256, 256))
 
-	return training_data, output_data
+	return training_data, output_data, original_resized_image
 
 
 # This postprocesses the out of the model so it can stroed in the database
@@ -56,18 +57,19 @@ def postprocessor(p_img, g_img):
 
 while(True):
 	message = redis_client.rpop(list_name)
-	
+
 	if(message):
 
-		post_id = ObjectId(message.decode("utf-8"))
+		message = json.loads(message)
+		post_id = ObjectId(message["id"])
+		
 		# get the document from the database
-		document = getDocument(post_id)
-
+		
 		# decode the image
-		original_image = cv.imdecode(np.frombuffer(document["buffer"], np.uint8), -1)
+		original_image = cv.imdecode(np.frombuffer(bytes(message["original"]["data"]), np.uint8), -1)
 
 		# preprocess the image
-		preprocessed_image, post_image = preprocessor(original_image)
+		preprocessed_image, post_image, original_resized_image = preprocessor(original_image)
 		
 		# generate an output from the image
 		generated_image = generator(preprocessed_image)
@@ -76,8 +78,9 @@ while(True):
 		final_image = postprocessor(post_image, generated_image)
 		
 		# Updating the database
-		is_success, buffer = cv.imencode(".jpg", final_image)
-		result = updateDocument(post_id, buffer.tostring())
+		is_success, color_image_buffer = cv.imencode(".jpg", final_image)
+		is_success, original_resized_image_buffer = cv.imencode(".jpg", original_resized_image)
+		result = updateDocument(post_id, original_resized_image_buffer.tostring(), color_image_buffer.tostring())
 		print(f"{datetime.now()}: Inserted into the database: {str(post_id)}", flush=True)
 
 	time.sleep(0.001)
