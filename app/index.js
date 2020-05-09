@@ -17,7 +17,7 @@ const PORT = process.env.PORT;
 
 
 MongoClient.connect(process.env.DBURI, async function (err, client) {
-	console.log("Connected successfully to server");
+	console.log(`${new Date().toLocaleString()}Connected successfully to server`);
 
 	db = client.db(process.env.dbname);
 
@@ -57,8 +57,8 @@ app.post('/upload', upload, async (req, res) => {
 	} else {
 		req.file.fieldname = `${req.file.fieldname}-${Date.now()}${path.extname(req.file.originalname)}`
 		image = await db.collection(process.env.collection).insertOne(req.file);
-		redisPublisher.publish("processing", `${image.insertedId}`);
-		console.log(`File inserted in DB and queue with id: ${image.insertedId}`);
+		redisPublisher.lpush(process.env.list_name, `${image.insertedId}`);
+		console.log(`${new Date().toLocaleString()}: File inserted in DB and queue with id: ${image.insertedId}`);
 		res.contentType("application/json");
 		res.send(JSON.stringify({"imageId": image.insertedId}));
 
@@ -76,13 +76,10 @@ app.get("/upload/:type", async (req, res) => {
 		let cursor = await db.collection(process.env.collection).find({ "_id": objectId(req.query.id) }).limit(1);
 		doc = await cursor.next();
 	} catch (e) {
-		console.log("error with database")
-		console.log(e)
+		console.log(`${new Date().toLocaleString()}: ${e}`)
 		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
 	}
 	if (!doc) {
-		console.log(req.query._id)
-		console.log("I am here")
 		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
 	} else {
 
@@ -115,7 +112,7 @@ app.get("/upload/:type", async (req, res) => {
 
 
 app.listen(PORT, () => {
-	console.log(`Listening on: http://localhost:${PORT}`);
+	console.log(`${new Date().toLocaleString()}: Listening on: http://localhost:${PORT}`);
 })
 
 

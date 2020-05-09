@@ -7,20 +7,20 @@ import os
 from bson.objectid import ObjectId
 import time
 import base64
+from datetime import datetime
 
 
 
 client = pymongo.MongoClient(os.getenv("DBURI"))
-print("Connected to Database", flush=True)
+print(f"{datetime.now()}: Connected to Database", flush=True)
 generator = tf.keras.models.load_model("./color_generator_170.h5")
 
 
-red = redis.Redis(host = 'redis', port=6379)
-sub = red.pubsub()
+redis_client = redis.Redis(host = 'redis', port=6379)
+list_name = os.getenv("list_name")
 
-sub.subscribe("processing")
 
-print("Connected to Queue", flush=True)
+print(f"{datetime.now()}: Connected to Queue", flush=True)
 
 def getDocument(post_id):
 	# Convert from string to ObjectId:
@@ -55,10 +55,11 @@ def postprocessor(p_img, g_img):
 
 
 while(True):
-	message = sub.get_message()
-	if(message and message["data"]!=1):
+	message = redis_client.rpop(list_name)
+	
+	if(message):
 
-		post_id = ObjectId(message['data'].decode("utf-8"))
+		post_id = ObjectId(message.decode("utf-8"))
 		# get the document from the database
 		document = getDocument(post_id)
 
@@ -77,7 +78,7 @@ while(True):
 		# Updating the database
 		is_success, buffer = cv.imencode(".jpg", final_image)
 		result = updateDocument(post_id, buffer.tostring())
-		print("Inserted into the database: "+str(post_id), flush=True)
+		print(f"{datetime.now()}: Inserted into the database: {str(post_id)}", flush=True)
 
 	time.sleep(0.001)
 

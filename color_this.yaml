@@ -12,6 +12,7 @@ services:
             - DBURI=mongodb+srv://asedhain:CapGv2jFwsT4rs2O@images-ulhix.mongodb.net/test?retryWrites=true&w=majority
             - dbname=Color
             - collection=images 
+            - list_name=processing
 
     worker:
         image: worker:1.0
@@ -19,4 +20,4 @@ services:
             - DBURI=mongodb+srv://asedhain:CapGv2jFwsT4rs2O@images-ulhix.mongodb.net/test?retryWrites=true&w=majority
             - dbname=Color
             - collection=images
-
+            - list_name=processing
