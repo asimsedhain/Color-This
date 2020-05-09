@@ -7,15 +7,22 @@ const redis = require("redis");
 const cors = require("cors");
 const redisPublisher = redis.createClient({ host: "redis", port: 6379 });
 
+// Creating the express, mongoclient and also the port from environment varible
+const PORT = process.env.PORT;
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
-app.use(cookie());
-app.use(cors());
+const storage = multer.memoryStorage()
+
+// Database variable
 let db;
 
-const PORT = process.env.PORT;
+
+// Using middleware
+app.use(cookie());
+app.use(cors());
 
 
+// Connecting to the database
 MongoClient.connect(process.env.DBURI, async function (err, client) {
 	console.log(`${new Date().toLocaleString()}Connected successfully to server`);
 
@@ -23,8 +30,7 @@ MongoClient.connect(process.env.DBURI, async function (err, client) {
 
 });
 
-
-const storage = multer.memoryStorage()
+// Setting multer for uploading files
 const upload = multer({
 	storage: storage,
 	limits: { fileSize: 16000000 },
@@ -40,7 +46,8 @@ app.use(express.static("public"));
 
 
 
-//handling the first endpoint
+// Handling the first endpoint
+// This will return the homepage
 app.get("/", (req, res) => {
 	res.statusCode = 200;
 	res.setHeader("Content-Type", "text/html");
@@ -49,74 +56,64 @@ app.get("/", (req, res) => {
 
 
 
-// endpoint for uploading pictures
+// Endpoint for uploading pictures
+// Uploads the picture to the queue
+// Uploads the metadata to the database
+// Sends the id back to the client 
 app.post('/upload', upload, async (req, res) => {
 	if (!req.file) {
-
 		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
 	} else {
+
 		req.file.fieldname = `${Date.now()}${path.extname(req.file.originalname)}`
-		image = await db.collection(process.env.collection).insertOne({fieldname: req.file.fieldname, originalname: req.file.originalname, encoding: req.file.encoding, mimetype: req.file.mimetype, size: req.file.size});
-		redisPublisher.lpush(process.env.list_name, JSON.stringify({id: image.insertedId, original: req.file.buffer}));
+
+		// Inserting metadata to the database
+		image = await db.collection(process.env.collection).insertOne({ fieldname: req.file.fieldname, originalname: req.file.originalname, encoding: req.file.encoding, mimetype: req.file.mimetype, size: req.file.size });
+
+		// Inserting the file to the queue
+		redisPublisher.lpush(process.env.list_name, JSON.stringify({ id: image.insertedId, original: req.file.buffer }));
+
+		// Logging
 		console.log(`${new Date().toLocaleString()}: File inserted in DB and queue with id: ${image.insertedId}`);
+
+		// Sending the id back to the client
 		res.contentType("application/json");
-		res.send(JSON.stringify({"imageId": image.insertedId}));
+		res.send(JSON.stringify({ "imageId": image.insertedId }));
 
 	}
 });
-// get request for getting the images associated with this account
+
+
+// Endpoint that handles the request for the image
+// Needs to have a id query param
+// type: original | color
+// Sends the requested image of the type and id
 app.get("/upload/:type", async (req, res) => {
-	let doc
-	if (!req.query.id) {
-		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
-		return
-	}
-	
 	try {
 		let cursor = await db.collection(process.env.collection).find({ "_id": objectId(req.query.id) }).limit(1);
-		doc = await cursor.next();
+		let doc = await cursor.next();
+		res.status(200)
+		res.contentType("jpeg")
+		res.end(doc[req.params.type.toLocaleLowerCase()].buffer, "binary")
+
+
 	} catch (e) {
 		console.log(`${new Date().toLocaleString()}: ${e}`)
 		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
-	}
-	if (!doc) {
-		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
-	} else {
 
-		if (!req.params.type) {
-		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
-		} else
-			if (req.params.type.toLowerCase() === "original") {
-				res.status(200)
-				res.contentType("jpeg")
-				res.end(doc.original.buffer, "binary")
-			}
-			else if (req.params.type.toLowerCase() === "color") {
-				if (!doc.color) {
-		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
-				} else {
-				res.status(200)
-					res.contentType("jpeg")
-					res.end(doc.color.buffer, "binary")
-				}
-			} else {
-		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
-			}
 	}
 })
 
 
 
-
-
-
-
+// Starts listening
 app.listen(PORT, () => {
 	console.log(`${new Date().toLocaleString()}: Listening on: http://localhost:${PORT}`);
 })
 
 
 // Check File Type
+// Middleware helper function
 function checkFileType(file, cb) {
 	// Allowed ext
 	const filetypes = /jpeg|jpg|png/;

@@ -26,13 +26,14 @@ def getDocument(post_id):
 	# Convert from string to ObjectId:
 	document = client[os.getenv("dbname")][os.getenv("collection")].find_one({'_id': ObjectId(post_id)})
 	return document
+
+
 def updateDocument(post_id,original_buffer, color_buffer):
 	result = client[os.getenv("dbname")][os.getenv("collection")].update_one({'_id': ObjectId(post_id)}, {'$set': {"original":original_buffer, 'color':color_buffer}})
 	return result
 
 # This preprocesses any image so it can be passed into the model
 def preprocessor(img):
-	# resized_image = cv.resize(img, (128, 128))
 	temp_img = cv.cvtColor(img, cv.COLOR_BGR2LAB)
 	temp_img = temp_img.astype(np.float32)
 	temp_img = ((temp_img/127.5)-1)
