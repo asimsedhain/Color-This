@@ -3,7 +3,7 @@ services:
     redis:
         image: redis:latest
 
-    color_server:
+    front_end:
         image: color_this:1.0 
         ports:
             - 5000:5000
