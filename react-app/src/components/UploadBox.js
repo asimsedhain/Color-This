@@ -1,37 +1,41 @@
 import React from "react";
-import { Component } from 'react';
-import { Card, CardBody, CardHeader } from "reactstrap";
+import { Row, Col, Card, CardBody, CardHeader, Button, CardText } from "reactstrap";
 
-class UploadBox extends Component {
-	constructor(props) {
-			super(props);
-	}
-	
+function UploadBox(props) {
 
-	uploadImage = (e) => {
-		alert("Hello");
-		e.preventDefault();
+	return (
 
+		<Row>
+			<Col sm="9" md="7" lg="5" className="mx-auto">
+				<Card className="my-3" style={{ borderRadius: 0 }}>
+					<CardHeader tag="h5" className="text-center bg-light text-dark">Colorize Your Image</CardHeader>
+					<CardBody>
+						<CardText tag="h5" className="text-secondary">Submit Your Image</CardText>
+						<form className="form-signin" id="form" action="/upload" method="POST" encType="multipart/form-data" >
+							<div className="form-group" onSubmit={props.uploadImage}>
+								<input type="file" id="Image" className="form-control" style={{ borderRadius: 0 }} name="Original" placeholder="Submit Image" required onChange={props.handleImageChange} value={props.inputValue} />
+							</div>
+							<button className="btn btn-primary btn-block text-uppercase" value="Submit" id="login"
+								type="submit" onClick={props.uploadImage} style={{ borderRadius: 0 }}>Submit</button>
+						</form>
+						<div className="mt-3">
 
-	}
+							<CardText tag="h5" className="text-secondary">Or, try a sample image</CardText>
 
-	render() {
-		return (<Card className="my-3">
-			<CardHeader tag="h5" className="text-center">Colorize Your Image</CardHeader>
+							<div className="btn-group d-flex" role="group" style={{borderRadius:0}}>
 
-			<CardBody>
-				<form className="form-signin" id="form" action="/upload" method="POST" encType="multipart/form-data" >
-					<div className="form-group" onSubmit={this.props.uploadImage}>
-						<input type="file" id="Image" className="form-control " name="Original" placeholder="Submit Image" required  onChange={this.props.handleImageChange} value={this.props.inputValue}/>
-					</div>
-					<button className="btn btn-primary btn-block text-uppercase" value="Submit" id="login"
-						type="submit" onClick={this.props.uploadImage}>Submit</button>
-				</form>
-			</CardBody>
-		</Card>)
-
-	}
+								<Button className="border-primary bg-primary" style={{borderRadius:0}}>Sample Image</Button>
+								<Button className="border-primary bg-primary" style={{borderRadius:0}}>Sample Image</Button>
+								<Button className="border-primary bg-primary" style={{borderRadius:0}}>Sample Image</Button>
+							</div>
+						</div>
+					</CardBody>
+				</Card>
+			</Col>
+		</Row>
+	)
 
 }
+
 
 export default UploadBox;
