@@ -27,7 +27,7 @@ function DisplayImage(props) {
 
 		</React.Fragment >)
 	} else if (props.imageState === 1) {
-		return (<div className="mx-auto"><div className="text-uppercase font-weight-light">coloring at the speed of light</div><ReactLoading type="balls" color={"#292b2c"} height={'30%'} width={'30%'} className="mx-auto" /></div>)
+		return (<div className="mx-auto"><div className="text-uppercase font-weight-light">coloring at the speed of light</div><ReactLoading type="balls" color={"#ffab00"} height={'30%'} width={'30%'} className="mx-auto" /></div>)
 	} else {
 		return (<React.Fragment></React.Fragment>)
 	}

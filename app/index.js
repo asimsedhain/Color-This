@@ -42,7 +42,7 @@ const upload = multer({
 
 
 // serving the static contents
-app.use(express.static("public"));
+app.use(express.static("build"));
 
 
 
@@ -51,7 +51,7 @@ app.use(express.static("public"));
 app.get("/", (req, res) => {
 	res.statusCode = 200;
 	res.setHeader("Content-Type", "text/html");
-	res.sendFile(path.join(public, "index.html"));
+	res.sendFile(path.join("build", "index.html"));
 });
 
 

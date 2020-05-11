@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Card, CardBody, CardHeader, Button, CardText } from "reactstrap";
+import { Row, Col, Card, CardBody, CardHeader, CardText } from "reactstrap";
 
 function UploadBox(props) {
 
@@ -15,18 +15,22 @@ function UploadBox(props) {
 							<div className="form-group" onSubmit={props.uploadImage}>
 								<input type="file" id="Image" className="form-control" style={{ borderRadius: 0 }} name="Original" placeholder="Submit Image" required onChange={props.handleImageChange} value={props.inputValue} />
 							</div>
-							<button className="btn btn-primary btn-block text-uppercase" value="Submit" id="login"
+							<button className="btn yellow btn-block text-uppercase text-light" value="Submit" id="login"
 								type="submit" onClick={props.uploadImage} style={{ borderRadius: 0 }}>Submit</button>
 						</form>
 						<div className="mt-3">
 
-							<CardText tag="h5" className="text-secondary">Or, try a sample image</CardText>
+							<CardText tag="h5" className="text-secondary">Or, Try a Sample Image</CardText>
 
-							<div className="btn-group d-flex" role="group" style={{borderRadius:0}}>
-
-								<Button className="border-primary bg-primary" style={{borderRadius:0}}>Sample Image</Button>
-								<Button className="border-primary bg-primary" style={{borderRadius:0}}>Sample Image</Button>
-								<Button className="border-primary bg-primary" style={{borderRadius:0}}>Sample Image</Button>
+							<div className="d-flex" style={{ borderRadius: 0 }}>
+								<Row>
+									{props.exampleImages.map((image)=>
+										<Col key={image.id}>
+										<img src={image.src}  style={image.selected? {borderRadius:0}:{filter: "grayscale(100%)", borderRadius:0}} className="img-thumbnail" onClick={props.handleExampleImageClick.bind(this, image.id)} ></img>
+										</Col>
+									)}
+								
+								</Row>
 							</div>
 						</div>
 					</CardBody>
