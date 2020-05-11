@@ -4,9 +4,9 @@
 
 Web Application for Image Colorization using Deep Generative Adversarial Network.
 
-## [Demo](https://)
+## [Demo](http://color-this.eastus.cloudapp.azure.com/)
 
-The site is hosted [here](https://).
+The site is hosted [here](http://color-this.eastus.cloudapp.azure.com/).
 
 ## [Model](https://github.com/asimsedhain/Image-Colorization-GAN)
 
