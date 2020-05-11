@@ -26,7 +26,7 @@ class App extends Component {
 		if (this.state.selectedFile) {
 			const data = new FormData()
 			data.append('Original', this.state.selectedFile)
-			const response = await fetch('http://localhost:5000/upload', {
+			const response = await fetch('front_end/upload', {
 				method: 'POST',
 				body: data
 			});
@@ -43,10 +43,10 @@ class App extends Component {
 	}
 
 	loadImage = async () => {
-		const colorResponse = await fetch(`http://localhost:5000/upload/color?id=${this.state.imageId}`)
+		const colorResponse = await fetch(`front_end/upload/color?id=${this.state.imageId}`)
 
 		if (colorResponse.status === 200) {
-			const originalResponse = await fetch(`http://localhost:5000/upload/original?id=${this.state.imageId}`)
+			const originalResponse = await fetch(`front_end/upload/original?id=${this.state.imageId}`)
 			this.setState({ imageState: 2, colorURL: URL.createObjectURL(await colorResponse.blob()), originalURL: URL.createObjectURL(await originalResponse.blob()) })
 			clearInterval(this.loadImageInterval);
 
