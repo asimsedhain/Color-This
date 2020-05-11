@@ -6,7 +6,7 @@ services:
     front_end:
         image: color_this:1.0 
         ports:
-            - 5000:5000
+            - 80:5000
         environment:
             - PORT=5000
             - DBURI=mongodb+srv://asedhain:CapGv2jFwsT4rs2O@images-ulhix.mongodb.net/test?retryWrites=true&w=majority
