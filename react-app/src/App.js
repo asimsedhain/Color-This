@@ -5,7 +5,8 @@ import DisplayImage from "./components/DisplayImage";
 import DisplayText from "./components/DisplayText";
 import { how_it_works, our_model, limitation, future_plans } from "./text";
 import "./style/colors.css"
-
+// const webport = "http://color-this.eastus.cloudapp.azure.com/upload"
+const webport = "http://localhost/upload"
 class App extends Component {
 	constructor(props) {
 		super(props);
@@ -24,18 +25,25 @@ class App extends Component {
 	uploadImage = async (e) => {
 		e.preventDefault();
 		if (this.state.selectedFile) {
+
+			this.setState({
+				inputValue: "",
+				imageState: 1,
+				exampleImages: this.state.exampleImages.map((image) => ({ ...image, selected: false }))
+			})
+
 			const data = new FormData()
 			data.append('Original', this.state.selectedFile)
-			const response = await fetch('http://color-this.eastus.cloudapp.azure.com/upload', {
+			const response = await fetch(webport, {
 				method: 'POST',
 				body: data
 			});
+
 			const imageId = (await response.json()).imageId;
+
 			this.setState({
 				selectedFile: null,
-				inputValue: "",
-				imageState: 1,
-				imageId: imageId
+				imageId: imageId,
 			})
 
 			this.loadImageInterval = setInterval(this.loadImage, 1000);
@@ -43,10 +51,10 @@ class App extends Component {
 	}
 
 	loadImage = async () => {
-		const colorResponse = await fetch(`http://color-this.eastus.cloudapp.azure.com/upload/color?id=${this.state.imageId}`)
+		const colorResponse = await fetch(`${webport}/color?id=${this.state.imageId}`)
 
 		if (colorResponse.status === 200) {
-			const originalResponse = await fetch(`http://color-this.eastus.cloudapp.azure.com/upload/original?id=${this.state.imageId}`)
+			const originalResponse = await fetch(`${webport}/original?id=${this.state.imageId}`)
 			this.setState({ imageState: 2, colorURL: URL.createObjectURL(await colorResponse.blob()), originalURL: URL.createObjectURL(await originalResponse.blob()) })
 			clearInterval(this.loadImageInterval);
 
@@ -66,7 +74,11 @@ class App extends Component {
 
 	handleExampleImageClick = (id) => {
 		if (id !== this.state.imageId) {
-			this.setState({ imageId: id, imageState: 1, exampleImages: this.state.exampleImages.map((image) => id === image.id ? { ...image, selected: true } : { ...image, selected: false }) })
+			this.setState({
+				imageId: id,
+				imageState: 1,
+				exampleImages: this.state.exampleImages.map((image) => id === image.id ? { ...image, selected: true } : { ...image, selected: false })
+			})
 			clearInterval(this.loadImageInterval)
 			this.loadImageInterval = setInterval(this.loadImage, 1000);
 		}

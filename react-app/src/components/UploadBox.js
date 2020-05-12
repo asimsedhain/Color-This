@@ -26,7 +26,7 @@ function UploadBox(props) {
 								<Row>
 									{props.exampleImages.map((image)=>
 										<Col key={image.id}>
-										<img src={image.src}  style={image.selected? {borderRadius:0}:{filter: "grayscale(100%)", borderRadius:0}} className="img-thumbnail" onClick={props.handleExampleImageClick.bind(this, image.id)} ></img>
+										<img src={image.src}  alt="Sample" style={image.selected? {borderRadius:0}:{filter: "grayscale(100%)", borderRadius:0}} className="img-thumbnail" onClick={props.handleExampleImageClick.bind(this, image.id)} ></img>
 										</Col>
 									)}
 								
