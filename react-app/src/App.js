@@ -26,7 +26,7 @@ class App extends Component {
 		if (this.state.selectedFile) {
 			const data = new FormData()
 			data.append('Original', this.state.selectedFile)
-			const response = await fetch('upload', {
+			const response = await fetch('http://color-this.eastus.cloudapp.azure.com/upload', {
 				method: 'POST',
 				body: data
 			});
@@ -43,10 +43,10 @@ class App extends Component {
 	}
 
 	loadImage = async () => {
-		const colorResponse = await fetch(`upload/color?id=${this.state.imageId}`)
+		const colorResponse = await fetch(`http://color-this.eastus.cloudapp.azure.com/upload/color?id=${this.state.imageId}`)
 
 		if (colorResponse.status === 200) {
-			const originalResponse = await fetch(`upload/original?id=${this.state.imageId}`)
+			const originalResponse = await fetch(`http://color-this.eastus.cloudapp.azure.com/upload/original?id=${this.state.imageId}`)
 			this.setState({ imageState: 2, colorURL: URL.createObjectURL(await colorResponse.blob()), originalURL: URL.createObjectURL(await originalResponse.blob()) })
 			clearInterval(this.loadImageInterval);
 
