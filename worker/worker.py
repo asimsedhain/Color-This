@@ -34,7 +34,12 @@ def updateDocument(post_id,original_buffer, color_buffer):
 
 # This preprocesses any image so it can be passed into the model
 def preprocessor(img):
-	temp_img = cv.cvtColor(img, cv.COLOR_BGR2LAB)
+	if(len(img.shape)<3):
+		temp_img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
+	else:
+		temp_img=img
+		
+	temp_img = cv.cvtColor(temp_img, cv.COLOR_BGR2LAB)
 	temp_img = temp_img.astype(np.float32)
 	temp_img = ((temp_img/127.5)-1)
 	temp_img_128 = cv.resize(temp_img, (128, 128))
@@ -55,29 +60,38 @@ def postprocessor(p_img, g_img):
 	generated_images = [cv.cvtColor(i, cv.COLOR_LAB2BGR) for i in generated_images.astype(np.uint8)]
 	return generated_images[0]
 
+def processing(message):
+	# decode the image
+	original_image = cv.imdecode(np.frombuffer(bytes(message["original"]["data"]), np.uint8), -1)
+
+	# preprocess the image
+	preprocessed_image, post_image, original_resized_image = preprocessor(original_image)
+	
+	# generate an output from the image
+	generated_image = generator(preprocessed_image)
+
+	# post process the output
+	final_image = postprocessor(post_image, generated_image)
+
+	return final_image, original_resized_image
+
 
 while(True):
 	message = redis_client.rpop(list_name)
 
 	if(message):
-
+		# getting the message and message id
 		message = json.loads(message)
 		post_id = ObjectId(message["id"])
-		
-		# get the document from the database
-		
-		# decode the image
-		original_image = cv.imdecode(np.frombuffer(bytes(message["original"]["data"]), np.uint8), -1)
 
-		# preprocess the image
-		preprocessed_image, post_image, original_resized_image = preprocessor(original_image)
-		
-		# generate an output from the image
-		generated_image = generator(preprocessed_image)
+		# processing the image
+		# if there is an error, it will pass an black image 
+		try:
+			final_image, original_resized_image = processing(message)		
+		except Exception as error:
+			print(error)
+			final_image, original_resized_image = np.zeros((256, 256)), np.zeros((256, 256))
 
-		# post process the output
-		final_image = postprocessor(post_image, generated_image)
-		
 		# Updating the database
 		is_success, color_image_buffer = cv.imencode(".jpg", final_image)
 		is_success, original_resized_image_buffer = cv.imencode(".jpg", original_resized_image)
