@@ -19,8 +19,8 @@ The API can be accessed using the http://color-this.eastus.cloudapp.azure.com/up
 
 |Type | Endpoint | Description |
 |---|---|---|
-| POST | / | endpoint for uploading the image data. A form data should be passed with the name `original` |
-| GET | /IMAGE_TYPE/ID | returns the image for the specified `ID`. The `IMAGE_TYPE` should be either `orignal` or `color` for the specific image. It will send a 404 status code if the image is still being processed|
+| POST | `/` | endpoint for uploading the image data. A form data should be passed with the name `original` |
+| GET | `/IMAGE_TYPE/ID` | returns the image for the specified `ID`. The `IMAGE_TYPE` should be either `orignal` or `color` for the specific image. It will send a 404 status code if the image is still being processed|
 
 ### Examples with JavaScript
 
