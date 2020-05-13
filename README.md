@@ -31,7 +31,7 @@ The API can be accessed using the http://color-this.eastus.cloudapp.azure.com/up
 
 const data = new FormData()
 data.append('Original', element.target.files[0])
-const response = await fetch('upload', {
+const response = await fetch('http://color-this.eastus.cloudapp.azure.com/upload/', {
 	method: 'POST',
 	body: data
 	});
@@ -44,7 +44,7 @@ const imageId = (await response.json()).imageId;
 ### GET `/IMAGE_TYPE/ID`
 ```javascript
 
-<IMG src="/IMAGE_TYPE/ID" />
+<IMG src="http://color-this.eastus.cloudapp.azure.com/upload/IMAGE_TYPE/ID" />
 
 ```
 
@@ -52,6 +52,7 @@ const imageId = (await response.json()).imageId;
 - [x] Improve UI
 - [x] Change queue to get the whole image
 - [ ] Add User Interaction
-- [ ] Add Documentation
-- [	] Refactor
+- [x] Add Documentation
+- [x] Refactor
+- [ ] Move to HTTPS
 - [ ] Deploy to Azure Kubernetes
