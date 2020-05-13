@@ -7,9 +7,14 @@ import { how_it_works, our_model, limitation, future_plans } from "./text";
 import "./style/colors.css"
 const webport = "http://color-this.eastus.cloudapp.azure.com/upload"
 // const webport = "http://localhost/upload"
+
+
 class App extends Component {
+
 	constructor(props) {
 		super(props);
+
+
 		this.state = {
 			selectedFile: null,
 			inputValue: "",
@@ -19,11 +24,15 @@ class App extends Component {
 			originalURL: null,
 			exampleImages: [{ id: "5eb966b8514a1ff444b6c6a3", src: " ../sample_image_0.jpg", selected: false }, { id: "5eb94c98514a1f162cb6c695", src: " ../sample_image_1.jpg", selected: false }, { id: "5eb9687c07660621a91580e4", src: " ../sample_image_2.jpg", selected: false }]
 		}
+
+	
 		this.loadImageInterval = null;
 	}
 
+	// Function uploads the image from the form
 	uploadImage = async (e) => {
 		e.preventDefault();
+
 		if (this.state.selectedFile) {
 
 			this.setState({
@@ -46,10 +55,13 @@ class App extends Component {
 				imageId: imageId,
 			})
 
+			// Sets and interval to call the function loadimage every second to see if the image has been processed.
 			this.loadImageInterval = setInterval(this.loadImage, 1000);
 		}
 	}
 
+	// Function loads the image if it is avaiable
+	// if not it won't do anything
 	loadImage = async () => {
 		const colorResponse = await fetch(`${webport}/color?id=${this.state.imageId}`)
 
@@ -61,6 +73,7 @@ class App extends Component {
 		}
 	}
 
+	// Handler for change in the form data
 	handleImageChange = (e) => {
 		this.setState({
 			selectedFile: e.target.files[0],
@@ -68,10 +81,7 @@ class App extends Component {
 		})
 	}
 
-	handleExampleImageMouseOver = (id) => {
-		this.setState({})
-	}
-
+	// Handle the event of example image click
 	handleExampleImageClick = (id) => {
 		if (id !== this.state.imageId) {
 			this.setState({
@@ -93,7 +103,7 @@ class App extends Component {
 
 				<DisplayText sty="light" content={how_it_works} />
 				<Container className={"my-5"}>
-					<UploadBox uploadImage={this.uploadImage} handleImageChange={this.handleImageChange} inputValue={this.state.inputValue} exampleImages={this.state.exampleImages} handleExampleImageMouseOver={this.handleExampleImageMouseOver} handleExampleImageClick={this.handleExampleImageClick} />
+					<UploadBox uploadImage={this.uploadImage} handleImageChange={this.handleImageChange} inputValue={this.state.inputValue} exampleImages={this.state.exampleImages} handleExampleImageClick={this.handleExampleImageClick} />
 					<DisplayImage imageState={this.state.imageState} colorURL={this.state.colorURL} originalURL={this.state.originalURL} />
 				</Container>
 				<DisplayText sty="yellow" content={our_model} style={{ backgroundColor: "#64dd17" }} />
