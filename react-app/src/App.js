@@ -5,8 +5,8 @@ import DisplayImage from "./components/DisplayImage";
 import DisplayText from "./components/DisplayText";
 import { how_it_works, our_model, limitation, future_plans } from "./text";
 import "./style/colors.css"
-// const webport = "http://color-this.eastus.cloudapp.azure.com/upload"
-const webport = "http://localhost/upload"
+const webport = "http://color-this.eastus.cloudapp.azure.com/upload"
+// const webport = "http://localhost/upload"
 
 
 class App extends Component {
@@ -22,7 +22,7 @@ class App extends Component {
 			imageId: null,
 			colorURL: null,
 			originalURL: null,
-			exampleImages: [{ id: "5eb966b8514a1ff444b6c6a3", src: " ../sample_image_0.jpg", selected: false }, { id: "5eb94c98514a1f162cb6c695", src: " ../sample_image_1.jpg", selected: false }, { id: "5eb9687c07660621a91580e4", src: " ../sample_image_2.jpg", selected: false }]
+			exampleImages: [{ id: "5ec14ad608db08b724a2b4e0", src: " ../sample_image_0.jpg", selected: false }, { id: "5ec14be608db082acaa2b4e1", src: " ../sample_image_1.jpg", selected: false }, { id: "5ec14c1608db080a3ca2b4e3", src: " ../sample_image_2.jpg", selected: false }]
 		}
 
 	
