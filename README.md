@@ -55,5 +55,6 @@ const imageId = (await response.json()).imageId;
 - [ ] Add User Interaction
 - [x] Add Documentation
 - [x] Refactor
+- [x] Skin Discoloration
 - [ ] Move to HTTPS
 - [ ] Deploy to Azure Kubernetes
