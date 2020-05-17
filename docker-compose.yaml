@@ -1,0 +1,23 @@
+version: "3.1"
+services:
+    redis:
+        image: redis:latest
+
+    front_end:
+        image: color_this:1.0 
+        ports:
+            - 80:80
+        environment:
+            - PORT=${PORT}
+            - DBURI=${DB_URI}
+            - dbname=${DB_NAME}
+            - collection=${DB_COLLECTION} 
+            - list_name=${LIST_NAME}
+
+    worker:
+        image: worker:1.0
+        environment:
+            - DBURI=${DB_URI}
+            - dbname=${DB_NAME}
+            - collection=${DB_COLLECTION} 
+            - list_name=${LIST_NAME}
