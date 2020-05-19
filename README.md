@@ -14,6 +14,12 @@ The site is hosted [here](http://color-this.eastus.cloudapp.azure.com/).
 The colorization model is based off of this [paper](https://richzhang.github.io/ideepcolor/).
 You can learn more about our training process by heading over to the model repo [here](https://github.com/asimsedhain/Image-Colorization-GAN).
 
+Currenlty our model has the following features:
+* 128x128 Image resolution (Advisable to resize your image for improved quality)
+* Automatic Colorization
+* Great for animal images
+* Suffers when there are structures in the image
+
 ## Usage
 
 The API can be accessed using the http://color-this.eastus.cloudapp.azure.com/upload/ endpoint.
@@ -48,6 +54,11 @@ const imageId = (await response.json()).imageId;
 <IMG src="http://color-this.eastus.cloudapp.azure.com/upload/IMAGE_TYPE/ID" />
 
 ```
+
+## System Architecture
+![system_architecture.jpg](system_architecture.jpg)
+
+Our system follows a simple producer-consumer model. Static files and file uploads are handled by a Node server. When a file is uploaded, the Node server uploads the image metadata to the MongoDB and returns an image ID to the client. The client can use the image ID to retrieve the final image after it has been processed. The Node server also pushes the actual image file to the Redis queue for further processing. On the other end, a Python worker is listening for jobs from the Redis queue. When there a job arrives, the worker processes the job and uploads the processed image to the MongoDB. The client can then retrieve the final image by using the image ID. 
 
 ## TODO
 - [x] Improve UI
