@@ -5,9 +5,9 @@ import DisplayImage from "./components/DisplayImage";
 import DisplayText from "./components/DisplayText";
 import { how_it_works, our_model, limitation, future_plans } from "./text";
 import "./style/colors.css"
-const webport = "http://color-this.eastus.cloudapp.azure.com/upload"
+// const webport = "http://color-this.eastus.cloudapp.azure.com/upload"
 // const webport = "http://localhost/upload"
-
+const webport = "/upload"
 
 class App extends Component {
 
