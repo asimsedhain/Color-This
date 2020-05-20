@@ -23,7 +23,7 @@ client = pymongo.MongoClient(DB_URI)
 print(f"{datetime.now()}: Connected to Database", flush=True)
 
 print(f"{datetime.now()}: Loading the Model", flush=True)
-generator = tf.keras.models.load_model("./color_generator_100.h5")
+generator = tf.keras.models.load_model("./color_generator_40.h5")
 print(f"{datetime.now()}: Model Loaded", flush=True)
 
 
@@ -51,6 +51,8 @@ while(True):
 			final_image, original_resized_image = processing(generator, message)		
 		except Exception as error:
 			traceback.print_exc()
+			print(f"{datetime.now()}: Error in Processing")
+			print(error)
 			final_image, original_resized_image = np.zeros((256, 256)), np.zeros((256, 256))
 
 		# Updating the database

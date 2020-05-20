@@ -21,14 +21,10 @@ def preprocessor(img, shape):
 
 
 # This postprocesses the out of the model so it can stroed in the database
-def postprocessor(p_img, g_img, shape, scale_preprocessed_image):
+def postprocessor(p_img, g_img, shape):
 
 	# reversing the normalization
 	preprocessed_image = tf.add(p_img, 0.5)
-
-	# scaling the preprocessing image if the flag is set to true
-	if(scale_preprocessed_image):
-		preprocessed_image = tf.image.resize(preprocessed_image, (shape, shape), tf.image.ResizeMethod.BICUBIC)
 
 	# resizing the generated image to the appropriate size
 	generated_image = tf.image.resize(g_img, (shape,shape), tf.image.ResizeMethod.BICUBIC)
@@ -54,19 +50,19 @@ def processing(generator, message):
 	original_image = cv.imdecode(np.frombuffer(bytes(message["original"]["data"]), np.uint8), -1)
 	
 	# preprocess the image
-	preprocessed_image= preprocessor(original_image, 128)
+	preprocessed_image= preprocessor(original_image, 256)
 
 	# preprocessed image of size 256*256
-	preprocessed_image_256 = preprocessor(original_image, 256)
+	preprocessed_image_512 = preprocessor(original_image, 512)
 
 	# Generating the colors
 	generated_image = generator(preprocessed_image)
 
 	# Postprocessing
-	final_image = postprocessor(preprocessed_image_256, generated_image, 256, False)
+	final_image = postprocessor(preprocessed_image_512, generated_image, 512)
 	
 	# original image resized to be saved in the database
-	original_resized_image = cv.resize(original_image, (256, 256))
+	original_resized_image = cv.resize(original_image, (512, 512))
 
 
 	return final_image, original_resized_image
