@@ -67,18 +67,17 @@ app.post('/upload', upload, async (req, res) => {
 
 		req.file.fieldname = `${Date.now()}${path.extname(req.file.originalname)}`
 
-		// Inserting metadata to the database
-		image = await db.collection(process.env.collection).insertOne({ fieldname: req.file.fieldname, originalname: req.file.originalname, encoding: req.file.encoding, mimetype: req.file.mimetype, size: req.file.size });
+		image = {_id:objectId(), fieldname: req.file.fieldname, originalname: req.file.originalname, encoding: req.file.encoding, mimetype: req.file.mimetype, size: req.file.size, original: req.file.buffer } 
 
 		// Inserting the file to the queue
-		redisPublisher.lpush(process.env.list_name, JSON.stringify({ id: image.insertedId, original: req.file.buffer }));
+		redisPublisher.lpush(process.env.list_name, JSON.stringify(image));
 
 		// Logging
-		console.log(`${new Date().toLocaleString()}: File inserted in DB and queue with id: ${image.insertedId}`);
+		console.log(`${new Date().toLocaleString()}: File inserted in queue with id: ${image._id}`);
 
 		// Sending the id back to the client
 		res.contentType("application/json");
-		res.send(JSON.stringify({ "imageId": image.insertedId }));
+		res.send(JSON.stringify({ "imageId": image._id }));
 
 	}
 });

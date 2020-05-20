@@ -36,6 +36,10 @@ def updateDocument(post_id,original_buffer, color_buffer):
 	result = client[DB_NAME][DB_COLLECTION].update_one({'_id': ObjectId(post_id)}, {'$set': {"original":original_buffer, 'color':color_buffer}})
 	return result
 
+def insertDocument(message):
+	result = client[DB_NAME][DB_COLLECTION].insert_one(message)
+	return result
+
 
 while(True):
 	message = redis_client.rpop(list_name)
@@ -43,7 +47,6 @@ while(True):
 	if(message):
 		# getting the message and message id
 		message = json.loads(message)
-		post_id = ObjectId(message["id"])
 
 		# processing the image
 		# if there is an error, it will pass an black image 
@@ -53,12 +56,13 @@ while(True):
 			traceback.print_exc()
 			final_image, original_resized_image = np.zeros((256, 256)), np.zeros((256, 256))
 
-		# Updating the database
 		is_success, color_image_buffer = cv.imencode(".jpg", final_image)
 		is_success, original_resized_image_buffer = cv.imencode(".jpg", original_resized_image)
-		result = updateDocument(post_id, original_resized_image_buffer.tostring(), color_image_buffer.tostring())
 
-		print(f"{datetime.now()}: Inserted into the database: {str(post_id)}", flush=True)
+		# Updating the database
+		result = insertDocument( {**message, "_id":ObjectId(message['_id']) ,"original": original_resized_image_buffer.tostring(), "color": color_image_buffer.tostring() })
+
+		print(f"{datetime.now()}: Inserted into the database: {result.inserted_id}", flush=True)
 
 	time.sleep(0.001)
 
