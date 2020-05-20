@@ -11,7 +11,7 @@ function DisplayImage(props) {
 				<div className="mx-auto mx-md-auto mx-sm-auto mx-lg-5 mx-xl-5 my-2">
 					<h5 className="text-center text-secondary">Original Image</h5>
 					<CardBody>
-						<img src={props.originalURL} alt="" width="256" height="256" />
+						<img src={props.originalURL} alt="" width="512" height="512" />
 					</CardBody>
 
 				</div>
@@ -19,7 +19,7 @@ function DisplayImage(props) {
 				<div className="mx-auto mx-sm-auto mx-md-auto mx-lg-5 mx-xl-5 my-2">
 					<h5 className="text-center text-secondary">Colored Image</h5>
 					<CardBody>
-						<img src={props.colorURL} alt="" width="256" height="256" />
+						<img src={props.colorURL} alt="" width="512" height="512" />
 					</CardBody>
 
 				</div>
