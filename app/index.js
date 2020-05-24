@@ -1,129 +1,39 @@
-const express = require("express");
-const path = require("path");
-const multer = require("multer");
-const cookie = require("cookie-parser");
-const objectId = require("mongodb").ObjectID;
+// Getting all the dependencies
+const app = require("./app")
 const redis = require("redis");
-const cors = require("cors");
-const redisPublisher = redis.createClient({ host: "redis", port: 6379 });
-
-// Creating the express, mongoclient and also the port from environment varible
-const PORT = process.env.PORT;
-const app = express();
 const MongoClient = require('mongodb').MongoClient;
-const storage = multer.memoryStorage()
 
-// Database variable
-let db;
-
-
-// Using middleware
-app.use(cookie());
-app.use(cors());
+// Getting the envirionment varibles
+const PORT = process.env.PORT;
+const LISTNAME = process.env.list_name;
+const COLLECTION = process.env.collection
+const DBURI = process.env.DBURI;
+const DBNAME = process.env.dbname;
 
 
-// Connecting to the database
-MongoClient.connect(process.env.DBURI, async function (err, client) {
+// Passing environment variables to the app
+app.set("LISTNAME", LISTNAME);
+app.set("COLLECTION", COLLECTION)
+
+
+
+// connecting to the redis server and attaching it to the app
+const redisPublisher = redis.createClient({ host: "redis", port: 6379 });
+app.set("redis", redisPublisher)
+
+
+// Connecting to the database and attaching it to the app
+MongoClient.connect(DBURI, async function (err, client) {
 	console.log(`${new Date().toLocaleString()}Connected successfully to server`);
 
-	db = client.db(process.env.dbname);
+	const db = client.db(DBNAME);
 
-});
-
-// Setting multer for uploading files
-const upload = multer({
-	storage: storage,
-	limits: { fileSize: 16000000 },
-	fileFilter: function (req, file, cb) {
-		checkFileType(file, cb);
-	}
-}).single("Original");
-
-
-
-// serving the static contents
-app.use(express.static("build"));
-
-
-
-// Handling the first endpoint
-// This will return the homepage
-app.get("/", (req, res) => {
-	res.statusCode = 200;
-	res.setHeader("Content-Type", "text/html");
-	res.sendFile(path.join("build", "index.html"));
+	app.set("db", db);
 });
 
 
-
-// Endpoint for uploading pictures
-// Uploads the picture to the queue
-// Uploads the metadata to the database
-// Sends the id back to the client 
-app.post('/upload', upload, async (req, res) => {
-	if (!req.file) {
-		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
-	} else {
-
-		req.file.fieldname = `${Date.now()}${path.extname(req.file.originalname)}`
-
-		image = {_id:objectId(), fieldname: req.file.fieldname, originalname: req.file.originalname, encoding: req.file.encoding, mimetype: req.file.mimetype, size: req.file.size, original: req.file.buffer } 
-
-		// Inserting the file to the queue
-		redisPublisher.lpush(process.env.list_name, JSON.stringify(image));
-
-		// Logging
-		console.log(`${new Date().toLocaleString()}: File inserted in queue with id: ${image._id}`);
-
-		// Sending the id back to the client
-		res.contentType("application/json");
-		res.send(JSON.stringify({ "imageId": image._id }));
-
-	}
-});
-
-
-// Endpoint that handles the request for the image
-// Needs to have a id query param
-// type: original | color
-// Sends the requested image of the type and id
-app.get("/upload/:type", async (req, res) => {
-	try {
-		let cursor = await db.collection(process.env.collection).find({ "_id": objectId(req.query.id) }).limit(1);
-		let doc = await cursor.next();
-		res.status(200)
-		res.contentType("jpeg")
-		res.end(doc[req.params.type.toLocaleLowerCase()].buffer, "binary")
-
-
-	} catch (e) {
-		console.log(`${new Date().toLocaleString()}: ${e}`)
-		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
-
-	}
-})
-
-
-
-// Starts listening
+// Listening
 app.listen(PORT, () => {
 	console.log(`${new Date().toLocaleString()}: Listening on: http://localhost:${PORT}`);
 })
 
-
-// Check File Type
-// Middleware helper function
-function checkFileType(file, cb) {
-	// Allowed ext
-	const filetypes = /jpeg|jpg|png/;
-	// Check ext
-	const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-	// Check mime
-	const mimetype = filetypes.test(file.mimetype);
-
-	if (mimetype && extname) {
-		return cb(null, true);
-	} else {
-		cb('Error: Images Only!');
-	}
-}
