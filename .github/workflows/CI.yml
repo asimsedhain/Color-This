@@ -35,10 +35,14 @@ jobs:
         python-version: [3.6, 3.8]
     steps:
       - uses: actions/checkout@v2
-      - working-directory: ${{ env.working-directory }}
+
       - name: Use Python ${{ matrix.python-version }}
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - run: pip install -r requirements.txt
-      - run: python -m unittest
+      - name: Install all the dependencies
+        run: pip install -r requirements.txt
+        working-directory: ${{ env.working-directory }}
+      - name: Running Python Unit Test
+        run: python -m unittest
+        working-directory: ${{ env.working-directory }}
