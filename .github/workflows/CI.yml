@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       working-directory: ./app
+      DBURI: ${{ secrects.DBURI }}
     strategy:
       matrix:
         node-version: [10.x, 12.x]
@@ -27,7 +28,7 @@ jobs:
     - name: Running Unit Tests
       run: npm test
       working-directory: ${{ env.working-directory }}
-      
+
   Python_CI:
     runs-on: ubuntu-latest
     env:
