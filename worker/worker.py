@@ -9,7 +9,7 @@ import time
 from datetime import datetime
 import json
 import traceback
-from utils import processing
+from util import processing
 
 list_name = os.getenv("list_name")
 DB_URI = os.getenv("DBURI")
