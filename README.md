@@ -3,7 +3,7 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/asimsedhain/Color-This/graphs/commit-activity)
 [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](http://color-this.eastus.cloudapp.azure.com/)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](/)
-
+![Continious Integration](https://github.com/asimsedhain/Color-This/workflows/Continious%20Integration/badge.svg?event=push)
 
 ![screen_shot.jpg](screen_shot.jpg)
 
