@@ -24,7 +24,6 @@
 
 ![screen_shot.jpg](screen_shot.jpg)
 
-Web Application for Image Colorization using Deep Generative Adversarial Network.
 
 ## [Demo](http://color-this.eastus.cloudapp.azure.com/)
 
