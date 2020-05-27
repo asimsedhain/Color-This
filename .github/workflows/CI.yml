@@ -61,6 +61,9 @@ jobs:
       - name: Install all the dependencies
         run: pip install -r requirements.txt
         working-directory: ${{ env.working-directory }}
+      - name: Installing Tensorflow for the CI pipeline seperately
+        run: pip install tensorflow==2.2
+        working-directory: ${{ env.working-directory }}
       - name: Running Python Unit Test
         run: python -m unittest
         working-directory: ${{ env.working-directory }}
