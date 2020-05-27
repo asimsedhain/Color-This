@@ -1,9 +1,26 @@
-# [Color This](http://color-this.eastus.cloudapp.azure.com/)
+<p align="center">
+	<h1 align="center">
+		<a href="http://color-this.eastus.cloudapp.azure.com/">
+			Color This
+		</a>
+	</h1>
+	<p align="center">
+		Web Application for Image Colorization using Deep Generative Adversarial Networks.
+	</p>
+	<p align="center">
+		<a href="https://github.com/asimsedhain/Color-This/graphs/commit-activity">
+			<img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
+		</a>
+		<a href="http://color-this.eastus.cloudapp.azure.com/">
+			<img src="https://img.shields.io/website-up-down-green-red/http/shields.io.svg" />
+		</a>
+		<a href="/">
+			<img src="https://img.shields.io/github/license/Naereen/StrapDown.js.svg" />
+		</a>
+			<img src="https://github.com/asimsedhain/Color-This/workflows/Continious%20Integration/badge.svg?event=push" />
+	</p>
+</p>
 
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/asimsedhain/Color-This/graphs/commit-activity)
-[![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](http://color-this.eastus.cloudapp.azure.com/)
-[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](/)
-![Continious Integration](https://github.com/asimsedhain/Color-This/workflows/Continious%20Integration/badge.svg?event=push)
 
 ![screen_shot.jpg](screen_shot.jpg)
 
