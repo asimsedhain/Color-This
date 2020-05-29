@@ -53,7 +53,7 @@ app.post('/upload', upload, async (req, res) => {
 
 		req.file.fieldname = `${Date.now()}${path.extname(req.file.originalname)}`
 
-		image = {_id:objectId(), fieldname: req.file.fieldname, originalname: req.file.originalname, encoding: req.file.encoding, mimetype: req.file.mimetype, size: req.file.size, original: req.file.buffer } 
+		image = { _id: objectId(), fieldname: req.file.fieldname, originalname: req.file.originalname, encoding: req.file.encoding, mimetype: req.file.mimetype, size: req.file.size, original: req.file.buffer }
 
 		// Inserting the file to the queue
 		app.get("redis").lpush(app.get("LISTNAME"), JSON.stringify(image));
@@ -64,7 +64,6 @@ app.post('/upload', upload, async (req, res) => {
 		// Sending the id back to the client
 		res.contentType("application/json");
 		res.send(JSON.stringify({ "imageId": image._id }));
-
 	}
 });
 
@@ -75,16 +74,28 @@ app.post('/upload', upload, async (req, res) => {
 // Sends the requested image of the type and id
 app.get("/upload/:type", async (req, res) => {
 	try {
-		let cursor = await app.get("db").collection(app.get("COLLECTION")).find({ "_id": objectId(req.query.id) }).limit(1);
-		let doc = await cursor.next();
-		res.status(200)
-		res.contentType("jpeg")
-		res.end(doc[req.params.type.toLocaleLowerCase()].buffer, "binary")
+		
+			if ((await app.get("finishedList").get(req.query.id)) || req.query.skipDictionary){
+	
+			let cursor = await app.get("db").collection(app.get("COLLECTION")).find({ "_id": objectId(req.query.id) }).limit(1);
+			let doc = await cursor.next();
+			res.status(200)
+			res.contentType("jpeg")
+			res.end(doc[req.params.type.toLocaleLowerCase()].buffer, "binary")
+			}else{
+				throw "Image still being processed"
+			}
+
+
 
 
 	} catch (e) {
 		console.log(`${new Date().toLocaleString()}: ${e}`)
 		res.status(404).contentType("application/json").send(JSON.stringify({ "Image": null }));
+
+	}
+
+	if (!req.query.skipDictionary) {
 
 	}
 })

@@ -25,13 +25,28 @@ jobs:
         ports:
           # Maps port 6379 on service container to the host
           - 6379:6379
+      # Label used to access the service container
+      finishedList:
+        # Docker Hub image
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps port 6379 on service container to the host
+          - 5000:6379
+
+
           
     env:
       working-directory: ./app
       DBURI: ${{ secrets.DBURI }}
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [12.x]
     steps:
     - uses: actions/checkout@v2 
     - name: Use Node.js ${{ matrix.node-version }}
@@ -51,7 +66,7 @@ jobs:
       working-directory: ./worker
     strategy:
       matrix:
-        python-version: [3.6, 3.8]
+        python-version: [3.8]
     steps:
       - uses: actions/checkout@v2
       - name: Use Python ${{ matrix.python-version }}

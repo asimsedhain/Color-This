@@ -62,11 +62,12 @@ class App extends Component {
 
 	// Function loads the image if it is avaiable
 	// if not it won't do anything
-	loadImage = async () => {
-		const colorResponse = await fetch(`${webport}/color?id=${this.state.imageId}`)
+	loadImage = async (skip) => {
+		const skipDictionary = skip? "true": ""
+		const colorResponse = await fetch(`${webport}/color?id=${this.state.imageId}&skipDictionary=${skipDictionary}`)
 
 		if (colorResponse.status === 200) {
-			const originalResponse = await fetch(`${webport}/original?id=${this.state.imageId}`)
+			const originalResponse = await fetch(`${webport}/original?id=${this.state.imageId}&skipDictionary=${skipDictionary}`)
 			this.setState({ imageState: 2, colorURL: URL.createObjectURL(await colorResponse.blob()), originalURL: URL.createObjectURL(await originalResponse.blob()) })
 			clearInterval(this.loadImageInterval);
 
@@ -90,7 +91,7 @@ class App extends Component {
 				exampleImages: this.state.exampleImages.map((image) => id === image.id ? { ...image, selected: true } : { ...image, selected: false })
 			})
 			clearInterval(this.loadImageInterval)
-			this.loadImageInterval = setInterval(this.loadImage, 1000);
+			this.loadImageInterval = setInterval(()=>this.loadImage(true), 1000);
 		}
 	}
 

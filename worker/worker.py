@@ -32,6 +32,12 @@ redis_client = redis.Redis(host = 'redis', port=6379)
 print(f"{datetime.now()}: Connected to Queue", flush=True)
 
 
+print(f"{datetime.now()}: Connecting to Queue", flush=True)
+finished_list= redis.Redis(host = 'finishedList', port=6379)
+print(f"{datetime.now()}: Connected to Queue", flush=True)
+
+
+
 def updateDocument(post_id,original_buffer, color_buffer):
 	result = client[DB_NAME][DB_COLLECTION].update_one({'_id': ObjectId(post_id)}, {'$set': {"original":original_buffer, 'color':color_buffer}})
 	return result
@@ -61,8 +67,9 @@ while(True):
 
 		# Updating the database
 		result = insertDocument( {**message, "_id":ObjectId(message['_id']) ,"original": original_resized_image_buffer.tostring(), "color": color_image_buffer.tostring() })
+		finished_list.set(message["_id"], "true")		
 
-		print(f"{datetime.now()}: Inserted into the database: {result.inserted_id}", flush=True)
+		print(f"{datetime.now()}: Inserted into the database and finished list: {result.inserted_id}", flush=True)
 
 	time.sleep(0.001)
 
