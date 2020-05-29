@@ -40,7 +40,7 @@ describe("API Tests", () => {
 
 		// connecting to the redis finishedList and attaching it to the app
 		// finishedList = redis.createClient({ host: "finishedList", port: 6379 })
-		finishedList = redis.createClient({host: "finishedList", port:6379})
+		finishedList = redis.createClient({host: "finishedList", port:5000})
 		app.set("finishedList", finishedList)
 		await finishedList.flushall()
 
