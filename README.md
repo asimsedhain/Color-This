@@ -1,8 +1,6 @@
 <p align="center">
 	<h1 align="center">
-		<a href="http://color-this.eastus.cloudapp.azure.com/">
-			Color This
-		</a>
+		Color This
 	</h1>
 	<p align="center">
 		Web Application for Image Colorization using Deep Generative Adversarial Networks.
@@ -24,7 +22,6 @@
 
 ![screen_shot.jpg](screen_shot.jpg)
 
-Web Application for Image Colorization using Deep Generative Adversarial Network.
 
 ## [Demo](http://color-this.eastus.cloudapp.azure.com/)
 
