@@ -35,12 +35,12 @@ describe("API Tests", () => {
 		// Redis server does not need to be there
 		// All the events are queued until server is connected
 		// No server is needed for the tests to work
-		redisPublisher = redis.createClient({host: "redis", port:6379})
+		redisPublisher = redis.createClient({port:6379})
 		app.set("redis", redisPublisher)
 
 		// connecting to the redis finishedList and attaching it to the app
 		// finishedList = redis.createClient({ host: "finishedList", port: 6379 })
-		finishedList = redis.createClient({host: "finishedList", port:5000})
+		finishedList = redis.createClient({port:5000})
 		app.set("finishedList", finishedList)
 		await finishedList.flushall()
 
