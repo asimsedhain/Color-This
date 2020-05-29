@@ -37,7 +37,7 @@ jobs:
           --health-retries 5
         ports:
           # Maps port 6379 on service container to the host
-          - 6379:6379
+          - 5000:6379
 
 
           
