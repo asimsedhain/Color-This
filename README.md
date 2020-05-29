@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <p align="center">
 	<h1 align="center">
 		Color This
@@ -179,4 +178,3 @@ Our system follows a simple producer-consumer model. Static files and file uploa
 - [x] Skin Discoloration
 - [ ] Move to HTTPS
 - [ ] Deploy to Azure Kubernetes
->>>>>>> 046a04cd12e6a5afb1370e414693108073a03031
