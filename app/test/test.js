@@ -10,7 +10,7 @@ describe("API Tests", () => {
 
 	// Env Varibales
 	const COLLECTION = process.env.collection || "images"
-	const DBURI = process.env.DBURI || `mongodb+srv://tester:905F2UkGjak2FnGP@images-ulhix.mongodb.net/test?`
+	const DBURI = process.env.DBURI
 	const DBNAME = process.env.dbname || "Color"
 	const LISTNAME = process.env.list_name || "processing"
 
