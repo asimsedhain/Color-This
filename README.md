@@ -18,7 +18,9 @@
 			<img src="https://github.com/asimsedhain/Color-This/workflows/Continious%20Integration/badge.svg?event=push" />
 	</p>
 	<p align="center" style="box-shadow: 10px 10px;">
+	<kbd>
 	<img src="./screen_shot.jpg" />
+	</kbd>
 	</p>
 </p>
 
