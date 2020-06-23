@@ -1,0 +1,12 @@
+[submodule "Color-This_Node"]
+	path = Color-This_Node
+	url = https://github.com/asimsedhain/Color-This_Node.git
+	branch = master
+[submodule "Color-This_PythonWorker"]
+	path = Color-This_PythonWorker
+	url = https://github.com/asimsedhain/Color-This_PythonWorker.git
+	branch = master
+[submodule "Color-This_ReactFrontEnd"]
+	path = Color-This_ReactFrontEnd
+	url = https://github.com/asimsedhain/Color-This_ReactFrontEnd.git
+	branch = master
