@@ -12,28 +12,17 @@
 			<img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
 		</a>
 	<div align="center">
-	<table>
-		<tr>
-			<th>Front-End</th>
-			<th>Node Server</th>
-			<th>Python Worker</th>
-		</tr>
-		<tr>
-			<td>
-			<a href="https://colorthis.netlify.app/">
+	<p><b>Front-End<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>| <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>   Node Server   <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>  |   <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>  Python Worker</b></p>
+	<p>	<a href="https://colorthis.netlify.app/">
                 <img align="center" src="https://api.netlify.com/api/v1/badges/88ea1855-a15e-48ea-9bf5-1fa50ffa4608/deploy-status" />
         	</a>
-			</td>
-			<td>
+			<b>|</b>
 				<img src="https://github.com/asimsedhain/Color-This_Node/workflows/CI/badge.svg">
 				<img src="https://github.com/asimsedhain/Color-This_Node/workflows/CD/badge.svg">
-			</td>
-			<td>
+			<b>|</b>
 				<img src="https://github.com/asimsedhain/Color-This_PythonWorker/workflows/CI/badge.svg">
 				<img src="https://github.com/asimsedhain/Color-This_PythonWorker/workflows/CD/badge.svg">
-			</td>
-		</tr>
-	</table>
+			<p>
 	</div>
 	</p>
 	<p align="center">
