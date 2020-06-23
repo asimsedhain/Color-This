@@ -2,11 +2,10 @@
 	<h1 align="center">
 		Color This
 	</h1>
-	<p align="center"
-	Web Application for Image Colorization using Deep Generative Adversarial Networks.
+	<p align="center">
+		Web Application for Image Colorization using Deep Generative Adversarial Networks.
 	</p>
 	<p align="center">
-	This repo contains the frontend.
 	</p>
 	<p align="center">
 		<a href="https://github.com/asimsedhain/Color-This/graphs/commit-activity">
